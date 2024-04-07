@@ -1,25 +1,33 @@
-import logo from './logo.svg';
-import './App.css';
+// App.js
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { someAction } from './store/action';; // Import your action creators
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
-}
+const App = () => {
+    const dispatch = useDispatch();
+    const data = useSelector(state => state.someReducer.data);
+    const loader = useSelector(state => state.someReducer.loader);
+
+    useEffect(() => {
+        dispatch(someAction());
+    }, [dispatch]);
+
+    if(loader){
+      return <p>data is fetching</p>
+    }   
+    
+    return (
+        <div>
+            {
+              data && data.length > 0 &&  (<>
+              {data.map((i)=>(
+                <p>Data: {i.title}</p>
+              ))}
+              
+              </>)
+            }
+        </div>
+    );
+};
 
 export default App;
